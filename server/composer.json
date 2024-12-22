@@ -1,0 +1,16 @@
+{
+    "name": "romurs/server",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Romurs\\Server\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "romurs",
+            "email": "1romurs@gmail.com"
+        }
+    ],
+    "require": {}
+}
