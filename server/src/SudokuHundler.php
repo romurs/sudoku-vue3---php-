@@ -9,19 +9,15 @@ class SudokuHundler
 {
     private const FILE_PATH = 'sudoku.json';
 
-    // Генерация решённой судоку
     public function generateSolvedSudoku(): void
     {
-        $solvedSudoku = $this->generateSudoku(); // Метод для генерации решённой судоку
+        $solvedSudoku = $this->generateSudoku(); 
 
-        // Преобразование двумерного массива в одномерный
         $flatSudoku = $this->flattenSudoku($solvedSudoku);
 
-        // Очистка файла и запись массива в JSON
         file_put_contents(self::FILE_PATH, json_encode($flatSudoku));
     }
-
-    // Получение нерешённой судоку
+    
     public function getUnsolvedSudoku(): array
     {
         $flatSudoku = json_decode(file_get_contents(self::FILE_PATH), true);
@@ -29,18 +25,10 @@ class SudokuHundler
         if (!$flatSudoku) {
             throw new Exception("Solved Sudoku not found in " . self::FILE_PATH);
         }
-
-        // Преобразование одномерного массива обратно в двумерный
         $solvedSudoku = $this->unflattenSudoku($flatSudoku);
-
-        // Удаление клеток для создания нерешённой судоку
         $unsolvedSudoku = $this->removeCells($solvedSudoku);
-
-        // Преобразование обратно в одномерный массив перед возвратом
         return $this->flattenSudoku($unsolvedSudoku);
     }
-
-    // Проверка значения пользователя
     public function checkCell(int $i, int $j, int $value, array $unsolvedSudoku): bool
     {
         $flatSolvedSudoku = json_decode(file_get_contents(self::FILE_PATH), true);
@@ -48,28 +36,22 @@ class SudokuHundler
         if (!$flatSolvedSudoku) {
             throw new Exception("Solved Sudoku not found in " . self::FILE_PATH);
         }
-
-        // Преобразование в двумерный массив для проверки
         $solvedSudoku = $this->unflattenSudoku($flatSolvedSudoku);
 
         return $solvedSudoku[$i][$j] === $value;
     }
 
-    // Метод для генерации полного судоку (решённого)
     private function generateSudoku(): array
     {
         $sudoku = array_fill(0, 9, array_fill(0, 9, 0));
-
-        // Логика генерации решённой судоку (можно использовать алгоритм Backtracking)
         $this->fillSudoku($sudoku);
 
         return $sudoku;
     }
 
-    // Метод удаления случайных клеток для создания нерешённой судоку
     private function removeCells(array $sudoku): array
     {
-        $cellsToRemove = rand(40, 50); // Убираем 40-50 клеток
+        $cellsToRemove = rand(40, 50);
 
         while ($cellsToRemove > 0) {
             $i = rand(0, 8);
@@ -84,7 +66,6 @@ class SudokuHundler
         return $sudoku;
     }
 
-    // Заполнение судоку (рекурсивный метод Backtracking)
     private function fillSudoku(array &$sudoku): bool
     {
         for ($i = 0; $i < 9; $i++) {
@@ -113,7 +94,6 @@ class SudokuHundler
         return true;
     }
 
-    // Проверка, можно ли вставить число в клетку
     private function isValid(array $sudoku, int $row, int $col, int $num): bool
     {
         for ($x = 0; $x < 9; $x++) {
@@ -136,7 +116,6 @@ class SudokuHundler
         return true;
     }
 
-    // Преобразование двумерного массива в одномерный
     private function flattenSudoku(array $sudoku): array
     {
         $flatSudoku = [];
@@ -146,7 +125,6 @@ class SudokuHundler
         return $flatSudoku;
     }
 
-    // Преобразование одномерного массива обратно в двумерный
     private function unflattenSudoku(array $flatSudoku): array
     {
         $sudoku = [];
